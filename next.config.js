@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 
-await import("./env.mjs");
+// Skip env validation during build
+if (!process.env.SKIP_ENV_VALIDATION) {
+  process.env.SKIP_ENV_VALIDATION = "true";
+}
 
 const nextConfig = {
   reactStrictMode: true,
