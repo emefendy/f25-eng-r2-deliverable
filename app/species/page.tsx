@@ -16,7 +16,6 @@ export default async function SpeciesList() {
     // this is a protected route - only users who are signed in can view this route
     redirect("/");
   }
-
   // Obtain the ID of the currently signed-in user
   const sessionId = session.user.id;
 
@@ -30,7 +29,8 @@ export default async function SpeciesList() {
       </div>
       <Separator className="my-4" />
       <div className="flex flex-wrap justify-center">
-        {species?.map((species) => <SpeciesCard key={species.id} species={species} />)}
+        {/* Pass sessionId to each SpeciesCard so it can determine if the user is the author */}
+        {species?.map((species) => <SpeciesCard key={species.id} species={species} sessionId={sessionId} />)}
       </div>
     </>
   );
