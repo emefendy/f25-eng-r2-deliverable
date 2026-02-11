@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Nunito:wght@300;400;600;700;800&display=swap");
+
+@layer base {
+  :root {
+    --background: 35 100% 98%; /* Soft cream */
+    --foreground: 25 40% 30%; /* Warm brown */
+
+    --muted: 35 50% 95%;
+    --muted-foreground: 25 30% 45%; /* Medium brown */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 25 40% 30%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 25 40% 30%;
+
+    --border: 35 30% 90%;
+    --input: 35 30% 90%;
+
+    --primary: 14 100% 74%; /* Soft peach */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 350 100% 92%; /* Soft pink */
+    --secondary-foreground: 25 40% 30%;
+
+    --accent: 213 100% 87%; /* Soft blue */
+    --accent-foreground: 25 40% 30%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --ring: 14 100% 74%;
+
+    --radius: 1rem;
+  }
+
+  .dark,
+  [data-theme="dark"] {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+
+    --primary: 14 100% 74%;
+    --primary-foreground: 222.2 47.4% 1.2%;
+
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+
+    --radius: 1rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-cream font-cute text-foreground;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+    color: hsl(25, 40%, 30%); /* Warm brown */
+  }
+}
