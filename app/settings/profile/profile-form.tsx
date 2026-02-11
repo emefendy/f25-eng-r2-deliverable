@@ -128,7 +128,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
         <FormItem>
           <FormLabel>Email</FormLabel>
           <FormControl>
-            <Input readOnly placeholder={profile.email} />
+            <Input readOnly placeholder={profile.email ?? ""} />
           </FormControl>
           <FormDescription>This is your verified email address.</FormDescription>
           <FormMessage />
