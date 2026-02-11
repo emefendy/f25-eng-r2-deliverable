@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import Replicate from "replicate";
 
 export async function POST(request: Request) {
   try {
@@ -8,29 +9,30 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No image provided" }, { status: 400 });
     }
 
-    console.log("Calling Python backend...");
-
-    // Call Python Flask API
-    const pythonResponse = await fetch("http://localhost:5000/classify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ image }),
+    const replicate = new Replicate({
+      auth: process.env.REPLICATE_API_TOKEN,
     });
 
-    if (!pythonResponse.ok) {
-      throw new Error("Python API error");
-    }
+    console.log("Calling Replicate API...");
 
-    const pythonData = await pythonResponse.json();
-    const animalName = pythonData.label;
+    // Use BLIP-2 for image captioning/identification
+    const output = await replicate.run(
+      "andreasjansson/blip-2:4b32258c42e9efd4288bb9910bc532a69727f9acd26aa08e175713a0a857a608",
+      {
+        input: {
+          image: image,
+          question: "What animal or object is this? Be specific with the scientific name if it's an animal.",
+        },
+      },
+    );
 
-    console.log("Identified as:", animalName);
+    console.log("Replicate output:", output);
+
+    const identification = typeof output === "string" ? output : String(output);
 
     // Fetch Wikipedia info
     const wikiResponse = await fetch(
-      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(animalName)}`,
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(identification)}`,
     );
 
     let wikiData = null;
@@ -39,9 +41,9 @@ export async function POST(request: Request) {
     }
 
     const result = {
-      scientificName: animalName,
-      commonName: wikiData?.title || animalName,
-      confidence: pythonData.confidence,
+      scientificName: identification,
+      commonName: wikiData?.title || identification,
+      confidence: 0.9,
       description: wikiData?.extract || "No description available",
       wikipediaUrl: wikiData?.content_urls?.desktop?.page,
       imageUrl: wikiData?.thumbnail?.source,
@@ -50,9 +52,6 @@ export async function POST(request: Request) {
     return NextResponse.json(result);
   } catch (error) {
     console.error("Error in identify API:", error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to identify animal" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Failed to identify" }, { status: 500 });
   }
 }
