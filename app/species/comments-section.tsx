@@ -6,7 +6,6 @@ import { toast } from "@/components/ui/use-toast";
 import { createBrowserSupabaseClient } from "@/lib/client-utils";
 import { type Database } from "@/lib/schema";
 import { Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type Comment = Database["public"]["Tables"]["comments"]["Row"] & {
@@ -27,7 +26,6 @@ export default function CommentsSection({
   const [newComment, setNewComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [comments, setComments] = useState<Comment[]>(initialComments);
-  const router = useRouter();
   const supabase = createBrowserSupabaseClient();
 
   // Update comments when initialComments changes
@@ -43,7 +41,7 @@ export default function CommentsSection({
       .select(
         `
         *,
-        profiles (
+        profiles!inner (
           display_name
         )
       `,
@@ -55,7 +53,7 @@ export default function CommentsSection({
     console.log("Fetch error:", error);
 
     if (data) {
-      setComments(data as Comment[]);
+      setComments(data);
     }
   };
 
@@ -123,38 +121,35 @@ export default function CommentsSection({
 
   return (
     <div className="mt-8 space-y-6">
-      <h3 className="font-handwritten text-brown text-2xl font-bold">Comments 💬</h3>
+      <h3 className="text-2xl font-bold">Comments 💬</h3>
 
       {/* New Comment Form */}
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={(e) => void handleSubmit(e)} className="space-y-3">
         <Textarea
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           placeholder="Leave a comment... 🌸"
-          className="border-softPink/30 focus:border-peach rounded-2xl border-2"
+          className="rounded-2xl border-2"
           rows={3}
         />
-        <Button type="submit" disabled={isSubmitting} className="bg-peach hover:bg-peach/90 rounded-full">
+        <Button type="submit" disabled={isSubmitting} className="rounded-full">
           {isSubmitting ? "Posting..." : "Post Comment ✨"}
         </Button>
       </form>
 
       {/* Comments List */}
       <div className="space-y-4">
-        <p className="text-brown/50 text-xs">Total comments: {comments.length}</p>
+        <p className="text-xs text-muted-foreground">Total comments: {comments.length}</p>
         {comments.length === 0 ? (
-          <p className="text-brown/60 py-8 text-center">No comments yet. Be the first! 🎉</p>
+          <p className="py-8 text-center text-muted-foreground">No comments yet. Be the first! 🎉</p>
         ) : (
           comments.map((comment) => (
-            <div
-              key={comment.id}
-              className="border-softPink/20 rounded-2xl border-2 bg-white/60 p-4 transition-shadow hover:shadow-md"
-            >
+            <div key={comment.id} className="rounded-2xl border-2 bg-white/60 p-4 transition-shadow hover:shadow-md">
               <div className="mb-2 flex items-start justify-between">
                 <div>
-                  <p className="text-brown font-semibold">{comment.profiles?.display_name ?? "Anonymous"}</p>
-                  <p className="text-brown/60 text-xs">
-                    {new Date(comment.created_at).toLocaleDateString("en-US", {
+                  <p className="font-semibold">{comment.profiles?.display_name ?? "Anonymous"}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(comment.created_at ?? Date.now()).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
@@ -167,14 +162,14 @@ export default function CommentsSection({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleDelete(comment.id)}
+                    onClick={() => void handleDelete(comment.id)}
                     className="text-destructive hover:text-destructive/90"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 )}
               </div>
-              <p className="text-brown/90">{comment.content}</p>
+              <p>{comment.content}</p>
             </div>
           ))
         )}
