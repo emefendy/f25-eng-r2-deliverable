@@ -30,7 +30,7 @@ export default function IdentifyPage() {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Check file size (max 5MB)
+      // Check file size
       if (file.size > 5 * 1024 * 1024) {
         setError("Image must be smaller than 5MB");
         return;
@@ -85,7 +85,6 @@ export default function IdentifyPage() {
       </div>
 
       <div className="space-y-6">
-        {/* Upload Section */}
         <Card className="p-6">
           <div className="space-y-4">
             <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors hover:border-primary">
