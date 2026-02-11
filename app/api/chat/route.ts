@@ -1,10 +1,14 @@
 import { generateResponse } from "@/lib/services/species-chat";
 import { NextResponse, type NextRequest } from "next/server";
 
+interface ChatRequestBody {
+  message: string;
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Parse the request body
-    const body = await request.json();
+    const body = (await request.json()) as ChatRequestBody;
 
     // Validate input
     if (!body || typeof body.message !== "string" || !body.message.trim()) {
