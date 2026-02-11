@@ -44,7 +44,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
 
   // Set default values for the form (on open) to the existing profile data which was passed in as a prop
   const defaultValues = {
-    username: profile.display_name,
+    username: profile.display_name ?? "",
     bio: profile.biography,
   };
 
