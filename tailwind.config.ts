@@ -45,11 +45,21 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // 🌸 Cute pastel colors!
+        peach: "#FF9B7C",
+        cream: "#FFF5E8",
+        softPink: "#FFD1DC",
+        softBlue: "#B4D4FF",
+        softYellow: "#FFF4B7",
+        brown: "hsl(25, 40%, 30%)", // Warm brown
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        xl: "1.5rem",
+        "2xl": "2rem",
+        "3xl": "3rem",
       },
       keyframes: {
         "accordion-down": {
@@ -60,10 +70,19 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        float: "float 3s ease-in-out infinite",
+      },
+      fontFamily: {
+        cute: ["'Nunito'", "sans-serif"],
+        handwritten: ["'Caveat'", "cursive"],
       },
     },
   },

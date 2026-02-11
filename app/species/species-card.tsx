@@ -42,7 +42,7 @@ export default function SpeciesCard({ species, sessionId }: { species: Species; 
       <h4 className="text-lg font-light italic">{species.common_name}</h4>
       <p>{species.description ? species.description.slice(0, 150).trim() + "..." : ""}</p>
 
-      <SpeciesDetailsDialog species={species} />
+      <SpeciesDetailsDialog species={species} currentUserId={sessionId} />
     </div>
   );
 }
